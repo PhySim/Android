@@ -5,16 +5,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class Home extends ActionBarActivity {
+public class SceneCreator extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_scene_creator);
 
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new HomeFragment()).commit();
+					.add(R.id.container, new SceneCreatorFragment()).commit();
 		}
 	}
 
@@ -22,7 +22,7 @@ public class Home extends ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
+		getMenuInflater().inflate(R.menu.scene_creator, menu);
 		return true;
 	}
 
@@ -31,13 +31,9 @@ public class Home extends ActionBarActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		switch(item.getItemId())
-		{
-		case R.id.action_add_scene:
-			 
-			break;
-		case R.id.action_settings:
-			break;
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

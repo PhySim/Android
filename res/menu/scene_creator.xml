@@ -1,17 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.aspirephile.physim.Home" >
+    tools:context="com.aspirephile.physim.SceneCreator" >
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_add_scene"
-        android:title="@string/action_add_scene"
-        android:icon="@android:drawable/btn_plus"
-        app:showAsAction="always"/>
 
 </menu>
