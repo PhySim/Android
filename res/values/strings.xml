@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PhySim</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add_scene">Add scene</string>
+    <string name="scene_selection_title">Scene list</string>
+
+</resources>
