@@ -3,8 +3,12 @@
 
     <string name="app_name">PhySim</string>
     <string name="action_settings">Settings</string>
-    <string name="action_add_scene">Add scene</string>
+    <string name="action_add_scene">Create new scene</string>
     <string name="scene_selection_title">Scene list</string>
+    <string name="scene_list_name_sample">Scene name</string>
+    <string name="scene_list_bounded_title">Bounded Scene</string>
+    <string name="scene_list_feild1_sample">Scene feild1</string>
+    <string name="scene_list_feild2_sample">Scene feild2</string>
     <string name="scene_creator_name_title">Scene name</string>
     <string name="scene_creator_bounded_title">Include physical boundaries</string>
     <string name="title_activity_scene_creator">Scene Creator</string>

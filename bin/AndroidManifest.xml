@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.aspirephile.physim.SceneCreator"
+            android:name="com.aspirephile.physim.scenes.SceneCreator"
             android:label="@string/title_activity_scene_creator"
             android:parentActivityName="com.aspirephile.physim.Home" >
             <meta-data

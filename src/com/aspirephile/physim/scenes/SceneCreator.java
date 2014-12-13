@@ -1,4 +1,9 @@
-package com.aspirephile.physim;
+package com.aspirephile.physim.scenes;
+
+import com.aspirephile.physim.R;
+import com.aspirephile.physim.R.id;
+import com.aspirephile.physim.R.layout;
+import com.aspirephile.physim.R.menu;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -7,14 +12,17 @@ import android.view.MenuItem;
 
 public class SceneCreator extends ActionBarActivity {
 
+	SceneCreatorFragment sceneCreatorF;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scene_creator);
 
 		if (savedInstanceState == null) {
+			sceneCreatorF = new SceneCreatorFragment();
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new SceneCreatorFragment()).commit();
+					.add(R.id.container, sceneCreatorF).commit();
 		}
 	}
 
