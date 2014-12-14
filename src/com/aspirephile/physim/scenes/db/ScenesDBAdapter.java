@@ -61,7 +61,7 @@ public class ScenesDBAdapter {
 		l.w(inputText);
 		Cursor mCursor = null;
 		if (inputText == null || inputText.length() == 0) {
-			mCursor = db.query(ScenesDB.tables.scenes.name,
+			mCursor = query(ScenesDB.tables.scenes.name,
 					ScenesDB.tables.scenes.columns, null, null, null, null,
 					null);
 
@@ -79,12 +79,26 @@ public class ScenesDBAdapter {
 	}
 
 	public Cursor fetchAllScenes() {
-		Cursor mCursor = db.query(ScenesDB.tables.scenes.name,
+		Cursor mCursor = query(ScenesDB.tables.scenes.name,
 				ScenesDB.tables.scenes.columns, null, null, null, null, null);
 
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+	}
+
+	private Cursor query(String table, String[] columns, String selection,
+			String[] selectionArgs, String groupBy, String having,
+			String orderBy)
+
+	{
+		l.d("Querying database: " + ScenesDB.properties.DATABASE_NAME
+				+ ", table: " + table + ", selection: " + selection
+				+ ", selectionArgs: " + selectionArgs.toString()
+				+ ", groupBy: " + groupBy + ", having: " + having
+				+ ", orderBy: " + orderBy);
+		return db.query(table, columns, selection, selectionArgs, groupBy,
+				having, orderBy);
 	}
 }
