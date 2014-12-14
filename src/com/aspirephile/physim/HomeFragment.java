@@ -50,8 +50,11 @@ public class HomeFragment extends Fragment {
 	private void insertScenes() {
 		Scene scene1 = new Scene();
 		scene1.setName("Planetary");
-		scene1.setBounds(true);
-
+		dbAdapter.insertScene(scene1);
+		Scene scene2 = new Scene();
+		scene2.setName("Cellular");
+		scene2.lock();
+		dbAdapter.insertScene(scene2);
 	}
 
 	private void displayListView() {
@@ -70,7 +73,7 @@ public class HomeFragment extends Fragment {
 
 				// Get the state's capital from this row in the database.
 				String sceneName = cursor.getString(cursor
-						.getColumnIndexOrThrow(ScenesDB.keys.NAME));
+						.getColumnIndexOrThrow(ScenesDB.tables.scenes.column.NAME));
 				Toast.makeText(getActivity(), sceneName, Toast.LENGTH_SHORT)
 						.show();
 

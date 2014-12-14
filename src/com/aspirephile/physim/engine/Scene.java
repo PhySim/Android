@@ -1,6 +1,7 @@
 package com.aspirephile.physim.engine;
 
 import com.aspirephile.Vector;
+import com.aspirephile.Vector.Vector3;
 import com.aspirephile.debug.NullPointerAsserter;
 
 public class Scene {
@@ -9,7 +10,8 @@ public class Scene {
 	private String name;
 	private boolean bounded;
 
-	Vector<Double> primaryCorner,secondaryCorner;
+	// TODO Remove boundary feature
+	Vector3<Double> primaryCorner, secondaryCorner;
 
 	private boolean locked;
 
@@ -27,12 +29,14 @@ public class Scene {
 		}
 	}
 
+	// TODO Remove boundary feature
 	public void setBounds(Vector<Double> primaryCorner,
 			Vector<Double> secondaryCorner) {
-		if(!locked){
+		if (!locked) {
 		}
 	}
 
+	// TODO Remove boundary feature
 	public void disableBounding() {
 		if (!locked)
 			this.bounded = false;
@@ -45,4 +49,11 @@ public class Scene {
 	public boolean getBounded() {
 		return bounded;
 	}
+
+	@Override
+	public String toString() {
+		return Scene.class.toString() + "{" + "Name:" + name + ", locked:"
+				+ Boolean.toString(locked) + "}";
+	}
+
 }

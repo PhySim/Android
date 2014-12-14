@@ -3,6 +3,13 @@ package com.aspirephile.exception;
 import com.aspirephile.debug.NullPointerAsserter;
 
 public class ObjectLockedException extends Exception {
+	private static class defaults {
+
+		public static final String argumentName = "<Unknown>";
+		public static final String objectName = "<Unknown>";
+
+	}
+
 	NullPointerAsserter asserter = new NullPointerAsserter(
 			ObjectLockedException.class);
 
@@ -12,10 +19,18 @@ public class ObjectLockedException extends Exception {
 	 */
 	private static final long serialVersionUID = 6859641333683205071L;
 
-	private String argumentName = "<Unknown>";
-	private Class<?> argumentType;
-	private String objectName = "<Unknown>";
-	private Class<?> objectType;
+	private String argumentName;
+	private Class<?> argumentClass;
+	private String objectName;
+	private Class<?> objectClass;
+
+	public ObjectLockedException() {
+		// TODO Use setters for the ObjectLockedException constructor here
+		argumentName = ObjectLockedException.defaults.argumentName;
+		argumentClass = Object.class;
+		objectName = ObjectLockedException.defaults.objectName;
+		objectClass = Object.class;
+	}
 
 	public void setArgumentName(String name) throws NullPointerException {
 		if (asserter.assertPointer(name))
@@ -24,10 +39,10 @@ public class ObjectLockedException extends Exception {
 			throw new NullPointerException();
 	}
 
-	public void setArgumentType(Class<?> argumentType)
+	public void setArgumentClass(Class<?> argumentType)
 			throws NullPointerException {
 		if (asserter.assertPointer(argumentType))
-			this.argumentType = argumentType;
+			this.argumentClass = argumentType;
 		else
 			throw new NullPointerException();
 	}
@@ -39,9 +54,9 @@ public class ObjectLockedException extends Exception {
 			throw new NullPointerException();
 	}
 
-	public void setObjectType(Class<?> objectType) throws NullPointerException {
+	public void setObjectClass(Class<?> objectType) throws NullPointerException {
 		if (asserter.assertPointer(objectType))
-			this.objectType = objectType;
+			this.objectClass = objectType;
 		else
 			throw new NullPointerException();
 	}
@@ -50,16 +65,16 @@ public class ObjectLockedException extends Exception {
 		return argumentName;
 	}
 
-	public String getArgumentType() {
-		return argumentName;
+	public Class<?> getArgumentType() {
+		return argumentClass;
 	}
 
 	public String getObjectName() {
-		return argumentName;
+		return objectName;
 	}
 
-	public String getObjectType() {
-		return argumentName;
+	public Class<?> getObjectType() {
+		return objectClass;
 	}
 
 }

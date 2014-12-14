@@ -37,7 +37,8 @@ public class ScenesCursorAdapter extends CursorAdapter {
 		TextView feild1 = (TextView) view.findViewById(R.id.tv_scene_list_name);
 		TextView feild2 = (TextView) view.findViewById(R.id.tv_scene_list_name);
 
-		name.setText(cursor.getString(cursor.getColumnIndex(ScenesDB.keys.NAME)));
+		name.setText(cursor.getString(cursor
+				.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
 
 	}
 
