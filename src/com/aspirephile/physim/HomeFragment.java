@@ -67,11 +67,11 @@ public class HomeFragment extends Fragment {
 			e.printStackTrace();
 		} catch (SQLiteConstraintException e) {
 			e.printStackTrace();
-			Toast.makeText(
-					getActivity(),
-					getActivity().getResources()
-							.getString(R.string.hello_world), Toast.LENGTH_LONG)
-					.show();
+			//TODO Find alternate working method to indicate when a scene name is not unique
+			/*
+			 * Toast.makeText( getActivity(), getActivity().getResources()
+			 * .getString(R.string.hello_world), Toast.LENGTH_LONG) .show();
+			 */
 		}
 
 	}
