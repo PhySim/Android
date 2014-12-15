@@ -2,45 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tv_scene_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/scene_list_name_sample"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <CheckedTextView
-        android:id="@+id/ctt_scene_list_bounded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:checkMark="@android:drawable/checkbox_on_background"
-        android:checked="false"
-        android:clickable="false"
-        android:gravity="center"
-        android:text="@string/scene_list_bounded_title"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/tv_scene_list_feild1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/scene_list_feild1_sample"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/tv_scene_list_feild2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/scene_list_feild2_sample"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="@string/scene_list_name_sample" />
 
 </LinearLayout>

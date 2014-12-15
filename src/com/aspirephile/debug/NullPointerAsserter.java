@@ -16,12 +16,20 @@ public class NullPointerAsserter {
 
 	public boolean assertPointer(Object... objects) {
 		boolean allGood = true;
-		for (Object o : objects) {
-			if (o == null) {
-				allGood = false;
-				Log.e(tag, "NullPointerException of object");
+		if (objects != null) {
+			boolean array = objects.length > 1;
+			for (int i = 0; i < objects.length; i++) {
+				if (objects[i] == null) {
+					allGood = false;
+					Log.e(tag, "NullPointerException of object"
+							+ (array ? ("[" + i + "]") : ""));
+				}
 			}
+		} else {
+			allGood = false;
+			Log.e(tag, "NullPointerException of object");
 		}
+
 		return allGood;
 	}
 

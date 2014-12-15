@@ -1081,7 +1081,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int LinearLayout1=0x7f05003d;
-        public static final int action_add_scene=0x7f050046;
+        public static final int action_add_scene=0x7f050043;
         public static final int action_bar=0x7f05001c;
         public static final int action_bar_activity_content=0x7f050015;
         public static final int action_bar_container=0x7f05001b;
@@ -1093,7 +1093,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f050016;
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
-        public static final int action_settings=0x7f050045;
+        public static final int action_settings=0x7f050042;
         public static final int activity_chooser_view_content=0x7f050025;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
@@ -1101,7 +1101,6 @@ containing a value of this type.
         public static final int checkbox=0x7f05002d;
         public static final int collapseActionView=0x7f05000d;
         public static final int container=0x7f05003c;
-        public static final int ctt_scene_list_bounded=0x7f050042;
         public static final int default_activity_button=0x7f050028;
         public static final int dialog=0x7f05000e;
         public static final int disableHome=0x7f050008;
@@ -1145,8 +1144,6 @@ containing a value of this type.
         public static final int tabMode=0x7f050002;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
-        public static final int tv_scene_list_feild1=0x7f050043;
-        public static final int tv_scene_list_feild2=0x7f050044;
         public static final int tv_scene_list_name=0x7f05003e;
         public static final int up=0x7f050021;
         public static final int useLogo=0x7f050003;
@@ -1257,9 +1254,10 @@ containing a value of this type.
         public static final int action_add_scene=0x7f0a000f;
         public static final int action_settings=0x7f0a000e;
         public static final int app_name=0x7f0a000d;
-        public static final int hello_world=0x7f0a0018;
+        public static final int hello_world=0x7f0a0019;
         public static final int scene_creator_bounded_title=0x7f0a0016;
         public static final int scene_creator_name_title=0x7f0a0015;
+        public static final int scene_db_error_insertion=0x7f0a0018;
         public static final int scene_list_bounded_title=0x7f0a0012;
         public static final int scene_list_feild1_sample=0x7f0a0013;
         public static final int scene_list_feild2_sample=0x7f0a0014;

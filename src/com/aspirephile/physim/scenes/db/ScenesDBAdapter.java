@@ -7,9 +7,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.aspirephile.debug.Logger;
+import com.aspirephile.debug.NullPointerAsserter;
+import com.aspirephile.exception.SceneLockException;
 import com.aspirephile.physim.engine.Scene;
 
 public class ScenesDBAdapter {
+	private NullPointerAsserter asserter = new NullPointerAsserter(
+			ScenesDBAdapter.class);
 	Logger l = new Logger(ScenesDBAdapter.class);
 
 	private ScenesDBHelper dbHelper;
@@ -22,30 +26,42 @@ public class ScenesDBAdapter {
 	}
 
 	public ScenesDBAdapter open() throws SQLException {
+		l.d("Openning DB: " + ScenesDB.properties.DATABASE_NAME);
 		dbHelper = new ScenesDBHelper(mCtx);
 		db = dbHelper.getWritableDatabase();
 		return this;
 	}
 
 	public void close() {
+		l.d("Closing DB: " + ScenesDB.properties.DATABASE_NAME);
 		if (dbHelper != null) {
 			dbHelper.close();
 		}
 	}
 
-	public long insertScene(Scene scene) {
+	public long insertScene(Scene scene) throws SceneLockException,
+			NullPointerException {
 
 		l.d("Inserting scene: " + scene.toString());
 
-		ContentValues initialValues = new ContentValues();
-		initialValues.put(ScenesDB.tables.scenes.column.NAME, scene.getName());
-		initialValues.put(ScenesDB.tables.scenes.column.BOUNDED,
-				scene.getBounded());
-		initialValues.put(ScenesDB.tables.scenes.column.CONTINENT,
-				"Sample continent");
-		initialValues
-				.put(ScenesDB.tables.scenes.column.REGION, "Sample region");
-		return db.insert(ScenesDB.tables.scenes.name, null, initialValues);
+		try {
+			if (scene.isLocked()) {
+				ContentValues initialValues = new ContentValues();
+				initialValues.put(ScenesDB.tables.scenes.column.NAME,
+						scene.getName());
+				initialValues.put(ScenesDB.tables.scenes.column.BOUNDED,
+						(scene.getBounded() ? 1 : 0));
+				initialValues.put(ScenesDB.tables.scenes.column.CONTINENT,
+						"Sample continent");
+				initialValues.put(ScenesDB.tables.scenes.column.REGION,
+						"Sample region");
+				return db.insert(ScenesDB.tables.scenes.name, null,
+						initialValues);
+			} else
+				throw new SceneLockException(scene);
+		} catch (NullPointerException e) {
+			throw e;
+		}
 	}
 
 	public boolean deleteAllCountries() {
@@ -94,11 +110,34 @@ public class ScenesDBAdapter {
 
 	{
 		l.d("Querying database: " + ScenesDB.properties.DATABASE_NAME
-				+ ", table: " + table + ", selection: " + selection
-				+ ", selectionArgs: " + selectionArgs.toString()
-				+ ", groupBy: " + groupBy + ", having: " + having
-				+ ", orderBy: " + orderBy);
+				+ ", table: " + asserted(table) + ", selection: "
+				+ asserted(selection) + ", selectionArgs: "
+				+ asserted(selectionArgs) + ", groupBy: " + asserted(groupBy)
+				+ ", having: " + asserted(having) + ", orderBy: "
+				+ asserted(orderBy));
 		return db.query(table, columns, selection, selectionArgs, groupBy,
 				having, orderBy);
+	}
+
+	private String asserted(String s) {
+		return (asserter.assertPointer(s) == true ? s : "");
+	}
+
+	private String[] asserted(String[] s) {
+		String[] emptyStringArray = { "", "" };
+		return (asserter.assertPointer((Object[]) s) == true ? ((String[]) s)
+				: emptyStringArray);
+	}
+
+	public Cursor fetchAllSceneNames() {
+		String[] sa = { ScenesDB.tables.scenes.column.ROWID,
+				ScenesDB.tables.scenes.column.NAME };
+		Cursor mCursor = query(ScenesDB.tables.scenes.name, sa, null, null,
+				null, null, null);
+
+		if (mCursor != null) {
+			mCursor.moveToFirst();
+		}
+		return mCursor;
 	}
 }

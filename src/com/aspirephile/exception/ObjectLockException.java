@@ -2,7 +2,7 @@ package com.aspirephile.exception;
 
 import com.aspirephile.debug.NullPointerAsserter;
 
-public class ObjectLockedException extends Exception {
+public class ObjectLockException extends Exception {
 	private static class defaults {
 
 		public static final String argumentName = "<Unknown>";
@@ -11,7 +11,7 @@ public class ObjectLockedException extends Exception {
 	}
 
 	NullPointerAsserter asserter = new NullPointerAsserter(
-			ObjectLockedException.class);
+			ObjectLockException.class);
 
 	/**
 	 * Exception thrown when an attempt is made to set/modify an argument of a
@@ -24,12 +24,23 @@ public class ObjectLockedException extends Exception {
 	private String objectName;
 	private Class<?> objectClass;
 
-	public ObjectLockedException() {
-		// TODO Use setters for the ObjectLockedException constructor here
-		argumentName = ObjectLockedException.defaults.argumentName;
+	public ObjectLockException() {
+		// TODO Use setters for the ObjectLockException constructor here
+		argumentName = ObjectLockException.defaults.argumentName;
 		argumentClass = Object.class;
-		objectName = ObjectLockedException.defaults.objectName;
+		objectName = ObjectLockException.defaults.objectName;
 		objectClass = Object.class;
+
+		StackTraceElement[] stackTrace = getStackTrace();
+		int line = stackTrace.length;
+		StackTraceElement mSTE = new StackTraceElement("cls", "method", "file",
+				line + 1);
+		StackTraceElement[] mSTEA = new StackTraceElement[line + 1];
+		for (int i = 0; i < line; i++)
+			mSTEA[i] = stackTrace[i];
+		mSTEA[line] = mSTE;
+		super.setStackTrace(mSTEA);
+
 	}
 
 	public void setArgumentName(String name) throws NullPointerException {

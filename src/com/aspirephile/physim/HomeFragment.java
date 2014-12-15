@@ -1,6 +1,7 @@
 package com.aspirephile.physim;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.aspirephile.debug.Logger;
 import com.aspirephile.debug.NullPointerAsserter;
+import com.aspirephile.exception.SceneLockException;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.db.ScenesCursorAdapter;
 import com.aspirephile.physim.scenes.db.ScenesDB;
@@ -19,6 +22,7 @@ import com.aspirephile.physim.scenes.db.ScenesDBAdapter;
 
 public class HomeFragment extends Fragment {
 	NullPointerAsserter asserter = new NullPointerAsserter(HomeFragment.class);
+	Logger l = new Logger(HomeFragment.class);
 	ListView scenes;
 	ScenesCursorAdapter scenesAdapter;
 	ScenesDBAdapter dbAdapter;
@@ -50,16 +54,31 @@ public class HomeFragment extends Fragment {
 	private void insertScenes() {
 		Scene scene1 = new Scene();
 		scene1.setName("Planetary");
-		dbAdapter.insertScene(scene1);
+		scene1.lock();
 		Scene scene2 = new Scene();
 		scene2.setName("Cellular");
 		scene2.lock();
-		dbAdapter.insertScene(scene2);
+		try {
+			dbAdapter.insertScene(scene1);
+			dbAdapter.insertScene(scene2);
+		} catch (SceneLockException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (SQLiteConstraintException e) {
+			e.printStackTrace();
+			Toast.makeText(
+					getActivity(),
+					getActivity().getResources()
+							.getString(R.string.hello_world), Toast.LENGTH_LONG)
+					.show();
+		}
+
 	}
 
 	private void displayListView() {
 
-		Cursor cursor = dbAdapter.fetchAllScenes();
+		Cursor cursor = dbAdapter.fetchAllSceneNames();
 		scenesAdapter = new ScenesCursorAdapter(getActivity(), cursor, 0);
 		scenes.setAdapter(scenesAdapter);
 

@@ -42,7 +42,7 @@ public class ScenesDB {
 						+ ","
 						+ column.REGION
 						+ ","
-						+ " UNIQUE (" + column.BOUNDED + "));";
+						+ " UNIQUE (" + column.NAME + "));";
 				protected static final String drop = "DROP TABLE IF EXISTS "
 						+ scenes.name;
 			}

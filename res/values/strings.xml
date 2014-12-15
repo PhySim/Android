@@ -12,6 +12,7 @@
     <string name="scene_creator_name_title">Scene name</string>
     <string name="scene_creator_bounded_title">Include physical boundaries</string>
     <string name="title_activity_scene_creator">Scene Creator</string>
+    <string name="scene_db_error_insertion">The scene is not unique! Make sure that the name isn\'t already used for another scene</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>

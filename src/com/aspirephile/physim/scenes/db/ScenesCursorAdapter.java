@@ -6,7 +6,6 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.aspirephile.physim.R;
@@ -32,11 +31,6 @@ public class ScenesCursorAdapter extends CursorAdapter {
 		 * R.color.background_even)); }
 		 */
 		TextView name = (TextView) view.findViewById(R.id.tv_scene_list_name);
-		CheckedTextView bounded = (CheckedTextView) view
-				.findViewById(R.id.ctt_scene_list_bounded);
-		TextView feild1 = (TextView) view.findViewById(R.id.tv_scene_list_name);
-		TextView feild2 = (TextView) view.findViewById(R.id.tv_scene_list_name);
-
 		name.setText(cursor.getString(cursor
 				.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
 

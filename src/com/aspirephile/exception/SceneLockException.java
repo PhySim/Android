@@ -2,7 +2,7 @@ package com.aspirephile.exception;
 
 import com.aspirephile.physim.engine.Scene;
 
-public class SceneLockedException extends ObjectLockedException {
+public class SceneLockException extends ObjectLockException {
 
 	/**
 	 * Exception thrown when an attempt is made to set/modify an argument of a
@@ -10,8 +10,9 @@ public class SceneLockedException extends ObjectLockedException {
 	 */
 	private static final long serialVersionUID = 880701834776490523L;
 
-	public SceneLockedException() {
+	public SceneLockException(Scene scene) {
 		super.setObjectClass(Scene.class);
+		super.setObjectName(scene.getName());
 	}
 
 }

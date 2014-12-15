@@ -56,4 +56,8 @@ public class Scene {
 				+ Boolean.toString(locked) + "}";
 	}
 
+	public boolean isLocked() {
+		return locked;
+	}
+
 }
