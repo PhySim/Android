@@ -4,5 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.aspirephile.physim.scenes.SceneCreator"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+    <Button
+        android:id="@+id/b_scene_creator_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="@string/done" />
+
+</FrameLayout>
 

@@ -25,7 +25,8 @@
         <activity
             android:name="com.aspirephile.physim.scenes.SceneCreator"
             android:label="@string/title_activity_scene_creator"
-            android:parentActivityName="com.aspirephile.physim.Home" >
+            android:parentActivityName="com.aspirephile.physim.Home"
+            android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aspirephile.physim.Home" />

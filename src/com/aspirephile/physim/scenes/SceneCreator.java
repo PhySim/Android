@@ -1,13 +1,25 @@
 package com.aspirephile.physim.scenes;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
+import com.aspirephile.debug.Logger;
+import com.aspirephile.debug.NullPointerAsserter;
 import com.aspirephile.physim.R;
 
-public class SceneCreator extends ActionBarActivity {
+public class SceneCreator extends ActionBarActivity implements OnClickListener {
+	NullPointerAsserter asserter = new NullPointerAsserter(
+			SceneCreatorFragment.class);
+	Logger l = new Logger(SceneCreatorFragment.class);
+
+	Button done;
 
 	SceneCreatorFragment sceneCreatorF;
 
@@ -21,6 +33,8 @@ public class SceneCreator extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, sceneCreatorF).commit();
 		}
+		bridgeXML();
+		initializeFeilds();
 	}
 
 	@Override
@@ -43,4 +57,26 @@ public class SceneCreator extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void bridgeXML() {
+		done = (Button) findViewById(R.id.b_scene_creator_done);
+		asserter.assertPointer(done);
+	}
+
+	private void initializeFeilds() {
+		done.setOnClickListener(this);
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.b_scene_creator_done:
+			Intent i=new Intent();
+			setResult(Activity.RESULT_OK, i);
+			finish();
+			break;
+		default:
+			l.w("Unknown button clicked (id: " + v.getId() + ")");
+			break;
+		}
+	}
 }

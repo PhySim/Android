@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
 		dbAdapter = new ScenesDBAdapter(this.getActivity());
 		if (asserter.assertPointer(dbAdapter)) {
 			dbAdapter.open();
-			insertScenes();
+			//insertScenes();
 		}
 
 	}

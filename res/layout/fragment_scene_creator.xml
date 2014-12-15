@@ -14,19 +14,23 @@
         android:id="@+id/tv_scene_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scene_creator_name_title" />
+        android:text="@string/scene_creator_name_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/et_scene_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/scene_creator_name_hint"
         android:inputType="textPersonName" />
 
-    <CheckBox
-        android:id="@+id/cb_bounded"
+    <TextView
+        android:id="@+id/tv_scene_creator_name_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scene_creator_bounded_title" />
+        android:text="@string/scene_creator_name_message_empty"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/red" />
 
 </LinearLayout>
