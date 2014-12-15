@@ -1,14 +1,11 @@
 package com.aspirephile.physim.scenes;
 
-import com.aspirephile.physim.R;
-import com.aspirephile.physim.R.id;
-import com.aspirephile.physim.R.layout;
-import com.aspirephile.physim.R.menu;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.aspirephile.physim.R;
 
 public class SceneCreator extends ActionBarActivity {
 

@@ -1,5 +1,8 @@
 package com.aspirephile.physim;
 
+import com.aspirephile.physim.scenes.SceneCreator;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -31,10 +34,10 @@ public class Home extends ActionBarActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		switch(item.getItemId())
-		{
+		switch (item.getItemId()) {
 		case R.id.action_add_scene:
-			 
+			Intent i = new Intent(getApplicationContext(), SceneCreator.class);
+			startActivityForResult(i, PhySim.codes.sceneCreate);
 			break;
 		case R.id.action_settings:
 			break;
@@ -42,4 +45,10 @@ public class Home extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		
+	}
 }
