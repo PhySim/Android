@@ -7,9 +7,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aspirephile.debug.Logger;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.SceneCreator;
+import com.aspirephile.shared.debug.Logger;
 
 public class Home extends ActionBarActivity {
 	Logger l = new Logger(Home.class);

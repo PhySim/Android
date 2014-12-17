@@ -1,6 +1,6 @@
 package com.aspirephile.physim.scenes.db;
 
-import com.aspirephile.debug.NullPointerAsserter;
+import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class ScenesDB {
 	NullPointerAsserter asserter = new NullPointerAsserter(

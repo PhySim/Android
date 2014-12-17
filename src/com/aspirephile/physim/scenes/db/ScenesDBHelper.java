@@ -1,6 +1,6 @@
 package com.aspirephile.physim.scenes.db;
 
-import com.aspirephile.debug.Logger;
+import com.aspirephile.shared.debug.Logger;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

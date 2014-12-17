@@ -2,10 +2,10 @@ package com.aspirephile.physim.engine;
 
 import android.os.Bundle;
 
-import com.aspirephile.Vector;
-import com.aspirephile.Vector.Vector3;
-import com.aspirephile.debug.NullPointerAsserter;
 import com.aspirephile.physim.PhySim;
+import com.aspirephile.shared.Vector;
+import com.aspirephile.shared.Vector.Vector3;
+import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class Scene {
 	NullPointerAsserter asserter = new NullPointerAsserter(Scene.class);

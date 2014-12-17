@@ -12,13 +12,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.aspirephile.debug.Logger;
-import com.aspirephile.debug.NullPointerAsserter;
-import com.aspirephile.exception.SceneLockException;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.db.ScenesCursorAdapter;
 import com.aspirephile.physim.scenes.db.ScenesDB;
 import com.aspirephile.physim.scenes.db.ScenesDBAdapter;
+import com.aspirephile.shared.debug.Logger;
+import com.aspirephile.shared.debug.NullPointerAsserter;
+import com.aspirephile.shared.exception.SceneLockException;
 
 public class HomeFragment extends Fragment {
 	NullPointerAsserter asserter = new NullPointerAsserter(HomeFragment.class);

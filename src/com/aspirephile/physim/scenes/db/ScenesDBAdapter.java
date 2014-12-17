@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.aspirephile.debug.Logger;
-import com.aspirephile.debug.NullPointerAsserter;
-import com.aspirephile.exception.SceneLockException;
 import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.shared.debug.Logger;
+import com.aspirephile.shared.debug.NullPointerAsserter;
+import com.aspirephile.shared.exception.SceneLockException;
 
 public class ScenesDBAdapter {
 	private NullPointerAsserter asserter = new NullPointerAsserter(

@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aspirephile.debug.Logger;
-import com.aspirephile.debug.NullPointerAsserter;
 import com.aspirephile.physim.PhySim;
 import com.aspirephile.physim.R;
 import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.shared.debug.Logger;
+import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class SceneCreatorFragment extends Fragment implements
 		OnSceneFieldsValidityListener {
