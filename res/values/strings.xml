@@ -17,6 +17,8 @@
     <string name="done">Done</string>
     <string name="scene_creator_name_hint">Billiards</string>
     <string name="scene_creator_name_message_empty">Scene name can\'t be empty!</string>
+    <string name="scene_creator_name_message_not_unique">Scene name already exists!</string>
+    <string name="scene_creator_toast_field_invalid">Somethings wrong! Please check the feilds you entered</string>
 
     <!-- TODO add list of random scene names -->
 

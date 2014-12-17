@@ -1,8 +1,11 @@
 package com.aspirephile.physim.engine;
 
+import android.os.Bundle;
+
 import com.aspirephile.Vector;
 import com.aspirephile.Vector.Vector3;
 import com.aspirephile.debug.NullPointerAsserter;
+import com.aspirephile.physim.PhySim;
 
 public class Scene {
 	NullPointerAsserter asserter = new NullPointerAsserter(Scene.class);
@@ -17,6 +20,14 @@ public class Scene {
 
 	public Scene() {
 		locked = false;
+	}
+
+	public Scene(Bundle sceneInfo) {
+		try {
+			setName(sceneInfo.getString(PhySim.keys.sceneCreatorName));
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void lock() {
@@ -58,6 +69,12 @@ public class Scene {
 
 	public boolean isLocked() {
 		return locked;
+	}
+
+	public Bundle toBundle() {
+		Bundle bundle = new Bundle();
+		bundle.putString(PhySim.keys.sceneCreatorName, getName());
+		return bundle;
 	}
 
 }

@@ -9,12 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.aspirephile.debug.Logger;
 import com.aspirephile.debug.NullPointerAsserter;
+import com.aspirephile.physim.PhySim;
 import com.aspirephile.physim.R;
+import com.aspirephile.physim.engine.Scene;
 
-public class SceneCreator extends ActionBarActivity implements OnClickListener {
+public class SceneCreator extends ActionBarActivity implements OnClickListener,
+		OnSceneFieldsValidityListener {
 	NullPointerAsserter asserter = new NullPointerAsserter(
 			SceneCreatorFragment.class);
 	Logger l = new Logger(SceneCreatorFragment.class);
@@ -22,6 +26,8 @@ public class SceneCreator extends ActionBarActivity implements OnClickListener {
 	Button done;
 
 	SceneCreatorFragment sceneCreatorF;
+
+	String invalidFeilds;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +70,63 @@ public class SceneCreator extends ActionBarActivity implements OnClickListener {
 
 	private void initializeFeilds() {
 		done.setOnClickListener(this);
+		sceneCreatorF.setOnSceneFieldsValidityListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.b_scene_creator_done:
-			Intent i=new Intent();
-			setResult(Activity.RESULT_OK, i);
-			finish();
+			Intent i = new Intent();
+			Scene scene = sceneCreatorF.getScene();
+			Bundle sceneInfo;
+			if (scene != null) {
+				sceneInfo = scene.toBundle();
+				i.putExtra(PhySim.keys.sceneCreatorBundle, sceneInfo);
+				setResult(Activity.RESULT_OK, i);
+				finish();
+			} else// else case is more or less redundant since done button is
+					// expected to be disabled
+			{
+
+				Toast.makeText(
+						getApplicationContext(),
+						getResources().getString(
+								R.string.scene_creator_toast_field_invalid)
+								+ invalidFeilds, Toast.LENGTH_LONG).show();
+			}
+
 			break;
 		default:
 			l.w("Unknown button clicked (id: " + v.getId() + ")");
 			break;
 		}
+	}
+
+	@Override
+	public void onSceneInfoValid() {
+		l.d("Listener received scene info valid");
+		done.setEnabled(true);
+		invalidFeilds = null;
+	}
+
+	@Override
+	public void onSceneInfoInvalid(String... invalidFields) {
+		this.invalidFeilds = formatedStringArray(invalidFields);
+		l.d("Listener received scene info invalid" + invalidFeilds);
+		done.setEnabled(false);
+	}
+
+	public String formatedStringArray(String[] stringArray) {
+		if (asserter.assertPointer((Object[]) stringArray)) {
+			String result = "{";
+			for (int i = 0; i < stringArray.length; i += 2) {
+				result += (' ' + stringArray[i] + ':' + stringArray[i + 1] + ',');
+			}
+			result = result.substring(0, result.length() - 1);
+			result += '}';
+			return result;
+		}
+		return "";
 	}
 }

@@ -1,14 +1,18 @@
 package com.aspirephile.physim;
 
-import com.aspirephile.physim.scenes.SceneCreator;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.aspirephile.debug.Logger;
+import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.physim.scenes.SceneCreator;
+
 public class Home extends ActionBarActivity {
+	Logger l = new Logger(Home.class);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,21 @@ public class Home extends ActionBarActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
-		
+		l.d("Home activity received requestCode: " + requestCode
+				+ ", resultCode: " + resultCode);
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) {
+			case PhySim.codes.sceneCreate:
+				Bundle sceneInfo=data.getBundleExtra(PhySim.keys.sceneCreatorBundle);
+				Scene scene=new Scene(sceneInfo);
+				
+				break;
+
+			default:
+				break;
+			}
+		} else {
+		}
+
 	}
 }

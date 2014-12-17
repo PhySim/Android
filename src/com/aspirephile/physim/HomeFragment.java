@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
 		dbAdapter = new ScenesDBAdapter(this.getActivity());
 		if (asserter.assertPointer(dbAdapter)) {
 			dbAdapter.open();
-			//insertScenes();
+			// insertScenes();
 		}
 
 	}
@@ -67,7 +67,8 @@ public class HomeFragment extends Fragment {
 			e.printStackTrace();
 		} catch (SQLiteConstraintException e) {
 			e.printStackTrace();
-			//TODO Find alternate working method to indicate when a scene name is not unique
+			// TODO Find alternate working method to indicate when a scene name
+			// is not unique
 			/*
 			 * Toast.makeText( getActivity(), getActivity().getResources()
 			 * .getString(R.string.hello_world), Toast.LENGTH_LONG) .show();

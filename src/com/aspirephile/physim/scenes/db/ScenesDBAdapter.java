@@ -120,12 +120,12 @@ public class ScenesDBAdapter {
 	}
 
 	private String asserted(String s) {
-		return (asserter.assertPointer(s) == true ? s : "");
+		return (asserter.assertPointerQuietly(s) == true ? s : "");
 	}
 
 	private String[] asserted(String[] s) {
 		String[] emptyStringArray = { "", "" };
-		return (asserter.assertPointer((Object[]) s) == true ? ((String[]) s)
+		return (asserter.assertPointerQuietly((Object[]) s) == true ? ((String[]) s)
 				: emptyStringArray);
 	}
 
