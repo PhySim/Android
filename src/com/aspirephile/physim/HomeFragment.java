@@ -3,7 +3,11 @@ package com.aspirephile.physim;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +24,14 @@ import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 import com.aspirephile.shared.exception.SceneLockException;
 
-public class HomeFragment extends Fragment {
-	NullPointerAsserter asserter = new NullPointerAsserter(HomeFragment.class);
-	Logger l = new Logger(HomeFragment.class);
-	ListView scenes;
-	ScenesCursorAdapter scenesAdapter;
-	ScenesDBAdapter dbAdapter;
+public class HomeFragment extends Fragment implements
+		LoaderManager.LoaderCallbacks<Cursor> {
+	private NullPointerAsserter asserter = new NullPointerAsserter(
+			HomeFragment.class);
+	private Logger l = new Logger(HomeFragment.class);
+	private ListView scenes;
+	private ScenesCursorAdapter scenesAdapter;
+	private ScenesDBAdapter dbAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +54,7 @@ public class HomeFragment extends Fragment {
 			dbAdapter.open();
 			// insertScenes();
 		}
+		getLoaderManager().initLoader(0, null, this);
 
 	}
 
@@ -67,7 +74,7 @@ public class HomeFragment extends Fragment {
 			e.printStackTrace();
 		} catch (SQLiteConstraintException e) {
 			e.printStackTrace();
-			// TODO Find alternate working method to indicate when a scene name
+			// TODO Find method to indicate to the user when a scene name
 			// is not unique
 			/*
 			 * Toast.makeText( getActivity(), getActivity().getResources()
@@ -79,8 +86,11 @@ public class HomeFragment extends Fragment {
 
 	private void displayListView() {
 
-		Cursor cursor = dbAdapter.fetchAllSceneNames();
-		scenesAdapter = new ScenesCursorAdapter(getActivity(), cursor, 0);
+		// Cursor cursor = dbAdapter.fetchAllSceneNames();
+
+		// TODO Asyncronously fetch scene names
+
+		scenesAdapter = new ScenesCursorAdapter(getActivity(), null, 0);
 		scenes.setAdapter(scenesAdapter);
 
 		scenes.setOnItemClickListener(new OnItemClickListener() {
@@ -118,6 +128,35 @@ public class HomeFragment extends Fragment {
 		 * public Cursor runQuery(CharSequence constraint) { return
 		 * dbAdapter.fetchCountriesByName(constraint.toString()); } });
 		 */
+
+	}
+
+	public void insertScene(Scene scene) {
+		if (asserter.assertPointer(scene)) {
+			try {
+				dbAdapter.insertScene(scene);
+			} catch (SceneLockException e) {
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		return new CursorLoader(getActivity(), uri, projection, selection, selectionArgs, sortOrder).fetchAllSceneNames();
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		scenesAdapter.swapCursor(data);
+
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		scenesAdapter.swapCursor(null);
 
 	}
 }

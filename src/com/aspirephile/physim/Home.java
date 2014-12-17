@@ -10,9 +10,12 @@ import android.view.MenuItem;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.SceneCreator;
 import com.aspirephile.shared.debug.Logger;
+import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class Home extends ActionBarActivity {
-	Logger l = new Logger(Home.class);
+	private NullPointerAsserter asserter = new NullPointerAsserter(Home.class);
+	private Logger l = new Logger(Home.class);
+	private HomeFragment homeF;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +23,11 @@ public class Home extends ActionBarActivity {
 		setContentView(R.layout.activity_home);
 
 		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new HomeFragment()).commit();
+			homeF = new HomeFragment();
+			if (homeF != null) {
+				getSupportFragmentManager().beginTransaction()
+						.add(R.id.container, homeF).commit();
+			}
 		}
 	}
 
@@ -41,7 +47,7 @@ public class Home extends ActionBarActivity {
 		switch (item.getItemId()) {
 		case R.id.action_add_scene:
 			Intent i = new Intent(getApplicationContext(), SceneCreator.class);
-			startActivityForResult(i, PhySim.codes.sceneCreate);
+			startActivityForResult(i, PhySimProps.codes.sceneCreate);
 			break;
 		case R.id.action_settings:
 			break;
@@ -56,10 +62,20 @@ public class Home extends ActionBarActivity {
 				+ ", resultCode: " + resultCode);
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
-			case PhySim.codes.sceneCreate:
-				Bundle sceneInfo=data.getBundleExtra(PhySim.keys.sceneCreatorBundle);
-				Scene scene=new Scene(sceneInfo);
-				
+			case PhySimProps.codes.sceneCreate:
+				Bundle sceneInfo = data
+						.getBundleExtra(PhySimProps.keys.sceneCreatorBundle);
+				if (asserter.assertPointer(sceneInfo)) {
+					Scene scene = new Scene(sceneInfo);
+					if (asserter.assertPointer(scene)) {
+						if (asserter.assertPointer(homeF)) {
+							if (!scene.isLocked())
+								scene.lock();
+							homeF.insertScene(scene);
+						}
+					}
+				}
+
 				break;
 
 			default:

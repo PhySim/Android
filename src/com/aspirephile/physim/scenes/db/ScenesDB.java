@@ -24,7 +24,7 @@ public class ScenesDB {
 				public static final String REGION = "region";
 			}
 
-			protected static final String[] columns = { column.ROWID,
+			protected static final String[] allColumns = { column.ROWID,
 					column.NAME, column.BOUNDED, column.CONTINENT,
 					column.REGION };
 

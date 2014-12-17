@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.aspirephile.physim.PhySim;
+import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.shared.debug.Logger;
@@ -55,7 +55,7 @@ public class SceneCreatorFragment extends Fragment implements
 	}
 
 	private void initializeFeilds() {
-		setSceneNameValidity(SceneNameState.EMPTY);
+		updateSceneNameValidity(SceneNameState.EMPTY);
 		nameWatcher = new TextWatcher() {
 
 			@Override
@@ -66,22 +66,17 @@ public class SceneCreatorFragment extends Fragment implements
 
 				if (s.length() > 0) {
 
-					if (nameState != SceneNameState.GOOD) {
-						if (true)// TODO search through cursor of scene names
-									// (maybe asynchronously)
-									// for
-						// match and appropriately provide a message on
-						// the screen
-						{
-
-							setSceneNameValidity(SceneNameState.GOOD);
-						}
-					} else if (nameState != SceneNameState.NOT_UNIQUE) {
-						setSceneNameValidity(SceneNameState.NOT_UNIQUE);
-					}
-				} else if (nameState != SceneNameState.EMPTY) {
-					setSceneNameValidity(SceneNameState.EMPTY);
-				}
+					if (false)// TODO search through cursor of scene names
+								// (maybe asynchronously)
+								// for
+					// match and appropriately provide a message on
+					// the screen
+					{
+						updateSceneNameValidity(SceneNameState.NOT_UNIQUE);
+					} else
+						updateSceneNameValidity(SceneNameState.GOOD);
+				} else
+					updateSceneNameValidity(SceneNameState.EMPTY);
 
 			}
 
@@ -140,7 +135,7 @@ public class SceneCreatorFragment extends Fragment implements
 
 	}
 
-	public void setSceneNameValidity(SceneNameState state) {
+	public void updateSceneNameValidity(SceneNameState state) {
 		if (nameState != state) {
 			nameState = state;
 			l.d("Scene name state: " + state);
@@ -149,14 +144,17 @@ public class SceneCreatorFragment extends Fragment implements
 				validityListener.onSceneInfoValid();
 				nameMessage.setVisibility(View.GONE);
 				break;
-			case EMPTY:
-				nameMessage.setText(R.string.scene_creator_name_message_empty);
 			case NOT_UNIQUE:
-				nameMessage
-						.setText(R.string.scene_creator_name_message_not_unique);
+			case EMPTY:
 				nameMessage.setVisibility(View.VISIBLE);
 				validityListener.onSceneInfoInvalid(
-						PhySim.keys.sceneCreatorName, state.toString());
+						PhySimProps.keys.sceneCreatorName, state.toString());
+				if (nameState == SceneNameState.NOT_UNIQUE)
+					nameMessage
+							.setText(R.string.scene_creator_name_message_not_unique);
+				else if (nameState == SceneNameState.EMPTY)
+					nameMessage
+							.setText(R.string.scene_creator_name_message_empty);
 				break;
 			default:
 				l.d("Unknown scene name state selected (" + state + ")");

@@ -1,6 +1,6 @@
 package com.aspirephile.physim;
 
-public class PhySim {
+public class PhySimProps {
 
 	public static class codes {
 

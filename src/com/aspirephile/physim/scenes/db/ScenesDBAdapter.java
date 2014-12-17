@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.shared.debug.Logger;
@@ -14,7 +15,7 @@ import com.aspirephile.shared.exception.SceneLockException;
 public class ScenesDBAdapter {
 	private NullPointerAsserter asserter = new NullPointerAsserter(
 			ScenesDBAdapter.class);
-	Logger l = new Logger(ScenesDBAdapter.class);
+	private Logger l = new Logger(ScenesDBAdapter.class);
 
 	private ScenesDBHelper dbHelper;
 	private SQLiteDatabase db;
@@ -55,8 +56,10 @@ public class ScenesDBAdapter {
 						"Sample continent");
 				initialValues.put(ScenesDB.tables.scenes.column.REGION,
 						"Sample region");
-				return db.insert(ScenesDB.tables.scenes.name, null,
+				long result = db.insert(ScenesDB.tables.scenes.name, null,
 						initialValues);
+				l.d("Scene inserted successfully with result: " + result);
+				return result;
 			} else
 				throw new SceneLockException(scene);
 		} catch (NullPointerException e) {
@@ -78,12 +81,12 @@ public class ScenesDBAdapter {
 		Cursor mCursor = null;
 		if (inputText == null || inputText.length() == 0) {
 			mCursor = query(ScenesDB.tables.scenes.name,
-					ScenesDB.tables.scenes.columns, null, null, null, null,
+					ScenesDB.tables.scenes.allColumns, null, null, null, null,
 					null);
 
 		} else {
 			mCursor = db.query(true, ScenesDB.tables.scenes.name,
-					ScenesDB.tables.scenes.columns,
+					ScenesDB.tables.scenes.allColumns,
 					ScenesDB.tables.scenes.column.NAME + " like '%" + inputText
 							+ "%'", null, null, null, null, null);
 		}
@@ -92,16 +95,6 @@ public class ScenesDBAdapter {
 		}
 		return mCursor;
 
-	}
-
-	public Cursor fetchAllScenes() {
-		Cursor mCursor = query(ScenesDB.tables.scenes.name,
-				ScenesDB.tables.scenes.columns, null, null, null, null, null);
-
-		if (mCursor != null) {
-			mCursor.moveToFirst();
-		}
-		return mCursor;
 	}
 
 	private Cursor query(String table, String[] columns, String selection,
@@ -129,15 +122,26 @@ public class ScenesDBAdapter {
 				: emptyStringArray);
 	}
 
+	public Cursor fetchAllScenes() {
+		return queryScenes(ScenesDB.tables.scenes.allColumns);
+	}
+
 	public Cursor fetchAllSceneNames() {
-		String[] sa = { ScenesDB.tables.scenes.column.ROWID,
+		String[] columns = { ScenesDB.tables.scenes.column.ROWID,
 				ScenesDB.tables.scenes.column.NAME };
-		Cursor mCursor = query(ScenesDB.tables.scenes.name, sa, null, null,
-				null, null, null);
+		return queryScenes(columns);
+	}
+
+	public Cursor queryScenes(String[] columns) {
+		Cursor mCursor = query(ScenesDB.tables.scenes.name, columns, null,
+				null, null, null, null);
 
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
+
 	}
+
+
 }

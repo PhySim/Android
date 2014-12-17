@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.aspirephile.physim.PhySim;
+import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.shared.debug.Logger;
@@ -19,15 +19,15 @@ import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class SceneCreator extends ActionBarActivity implements OnClickListener,
 		OnSceneFieldsValidityListener {
-	NullPointerAsserter asserter = new NullPointerAsserter(
+	private NullPointerAsserter asserter = new NullPointerAsserter(
 			SceneCreatorFragment.class);
-	Logger l = new Logger(SceneCreatorFragment.class);
+	private Logger l = new Logger(SceneCreatorFragment.class);
 
-	Button done;
+	private Button done;
 
-	SceneCreatorFragment sceneCreatorF;
+	private SceneCreatorFragment sceneCreatorF;
 
-	String invalidFeilds;
+	private String invalidFeilds;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class SceneCreator extends ActionBarActivity implements OnClickListener,
 			Bundle sceneInfo;
 			if (scene != null) {
 				sceneInfo = scene.toBundle();
-				i.putExtra(PhySim.keys.sceneCreatorBundle, sceneInfo);
+				i.putExtra(PhySimProps.keys.sceneCreatorBundle, sceneInfo);
 				setResult(Activity.RESULT_OK, i);
 				finish();
 			} else// else case is more or less redundant since done button is
