@@ -5,28 +5,29 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 import com.aspirephile.shared.exception.SceneLockException;
+import com.aspirephile.shared.utils.StringManipulator;
 
-public class ScenesDBAdapter {
+public class ScenesDBHandler {
 	private NullPointerAsserter asserter = new NullPointerAsserter(
-			ScenesDBAdapter.class);
-	private Logger l = new Logger(ScenesDBAdapter.class);
+			ScenesDBHandler.class);
+	private StringManipulator stringManip = new StringManipulator(asserter);
+	private Logger l = new Logger(ScenesDBHandler.class);
 
 	private ScenesDBHelper dbHelper;
 	private SQLiteDatabase db;
 
 	private final Context mCtx;
 
-	public ScenesDBAdapter(Context ctx) {
+	public ScenesDBHandler(Context ctx) {
 		this.mCtx = ctx;
 	}
 
-	public ScenesDBAdapter open() throws SQLException {
+	public ScenesDBHandler open() throws SQLException {
 		l.d("Openning DB: " + ScenesDB.properties.DATABASE_NAME);
 		dbHelper = new ScenesDBHelper(mCtx);
 		db = dbHelper.getWritableDatabase();
@@ -108,8 +109,11 @@ public class ScenesDBAdapter {
 				+ asserted(selectionArgs) + ", groupBy: " + asserted(groupBy)
 				+ ", having: " + asserted(having) + ", orderBy: "
 				+ asserted(orderBy));
-		return db.query(table, columns, selection, selectionArgs, groupBy,
-				having, orderBy);
+		if (asserter.assertPointer(db))
+			return db.query(table, columns, selection, selectionArgs, groupBy,
+					having, orderBy);
+		else
+			return null;
 	}
 
 	private String asserted(String s) {
@@ -143,5 +147,29 @@ public class ScenesDBAdapter {
 
 	}
 
+	public Cursor getSceneByID(String sceneID) {
+		return db.query(ScenesDB.properties.DATABASE_NAME,
+				ScenesDB.tables.scenes.allColumns, "_ID=?",
+				new String[] { sceneID }, null, null,
+				ScenesDB.tables.scenes.column.NAME + " asc ");
+	}
+
+	public int update(ContentValues contentValues, String contactID) {
+		int cnt = db.update(ScenesDB.properties.DATABASE_NAME, contentValues,
+				"_id=?", new String[] { contactID });
+		return cnt;
+	}
+
+	public long insert(ContentValues values) {
+		long rowID = db.insert(ScenesDB.properties.DATABASE_NAME, null, values);
+		return rowID;
+	}
+
+	public int delete(String contactID) {
+		// TODO Implement protection from SQL injections
+		int cnt = db.delete(ScenesDB.tables.scenes.name, "_id=" + contactID,
+				null);
+		return cnt;
+	}
 
 }

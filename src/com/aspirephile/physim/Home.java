@@ -71,7 +71,7 @@ public class Home extends ActionBarActivity {
 						if (asserter.assertPointer(homeF)) {
 							if (!scene.isLocked())
 								scene.lock();
-							homeF.insertScene(scene);
+							// homeF.insertScene(scene);
 						}
 					}
 				}

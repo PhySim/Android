@@ -1,9 +1,8 @@
 package com.aspirephile.physim;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,19 +18,17 @@ import android.widget.Toast;
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.db.ScenesCursorAdapter;
 import com.aspirephile.physim.scenes.db.ScenesDB;
-import com.aspirephile.physim.scenes.db.ScenesDBAdapter;
+import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
-import com.aspirephile.shared.exception.SceneLockException;
 
-public class HomeFragment extends Fragment implements
+public class HomeFragment extends Fragment implements OnItemClickListener,
 		LoaderManager.LoaderCallbacks<Cursor> {
 	private NullPointerAsserter asserter = new NullPointerAsserter(
 			HomeFragment.class);
 	private Logger l = new Logger(HomeFragment.class);
 	private ListView scenes;
 	private ScenesCursorAdapter scenesAdapter;
-	private ScenesDBAdapter dbAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,12 +46,8 @@ public class HomeFragment extends Fragment implements
 	}
 
 	private void intializeFeilds() {
-		dbAdapter = new ScenesDBAdapter(this.getActivity());
-		if (asserter.assertPointer(dbAdapter)) {
-			dbAdapter.open();
-			// insertScenes();
-		}
-		getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().initLoader(PhySimProps.loaders.scenesLoader, null,
+				this);
 
 	}
 
@@ -65,50 +58,19 @@ public class HomeFragment extends Fragment implements
 		Scene scene2 = new Scene();
 		scene2.setName("Cellular");
 		scene2.lock();
-		try {
-			dbAdapter.insertScene(scene1);
-			dbAdapter.insertScene(scene2);
-		} catch (SceneLockException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		} catch (SQLiteConstraintException e) {
-			e.printStackTrace();
-			// TODO Find method to indicate to the user when a scene name
-			// is not unique
-			/*
-			 * Toast.makeText( getActivity(), getActivity().getResources()
-			 * .getString(R.string.hello_world), Toast.LENGTH_LONG) .show();
-			 */
-		}
 
 	}
 
 	private void displayListView() {
 
-		// Cursor cursor = dbAdapter.fetchAllSceneNames();
+		// Cursor cursor = dbHandler.fetchAllSceneNames();
 
 		// TODO Asyncronously fetch scene names
 
 		scenesAdapter = new ScenesCursorAdapter(getActivity(), null, 0);
 		scenes.setAdapter(scenesAdapter);
 
-		scenes.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> listView, View view,
-					int position, long id) {
-				// Get the cursor, positioned to the corresponding row in the
-				// result set
-				Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-
-				// Get the state's capital from this row in the database.
-				String sceneName = cursor.getString(cursor
-						.getColumnIndexOrThrow(ScenesDB.tables.scenes.column.NAME));
-				Toast.makeText(getActivity(), sceneName, Toast.LENGTH_SHORT)
-						.show();
-
-			}
-		});
+		scenes.setOnItemClickListener(this);
 
 		// TODO Add a search box for scenes
 
@@ -126,37 +88,55 @@ public class HomeFragment extends Fragment implements
 		 * 
 		 * scenesAdapter.setFilterQueryProvider(new FilterQueryProvider() {
 		 * public Cursor runQuery(CharSequence constraint) { return
-		 * dbAdapter.fetchCountriesByName(constraint.toString()); } });
+		 * dbHandler.fetchCountriesByName(constraint.toString()); } });
 		 */
 
 	}
 
-	public void insertScene(Scene scene) {
-		if (asserter.assertPointer(scene)) {
-			try {
-				dbAdapter.insertScene(scene);
-			} catch (SceneLockException e) {
-				e.printStackTrace();
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		return new CursorLoader(getActivity(), uri, projection, selection, selectionArgs, sortOrder).fetchAllSceneNames();
+		Uri uri = ScenesProvider.CONTENT_URI;
+		l.d("Instantiating new loader with URI: " + uri);
+		return new CursorLoader(getActivity(), uri, null, null, null, null);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		l.d("Cursor load finished");
 		scenesAdapter.swapCursor(data);
+		data.moveToFirst();
+		while (data.moveToNext()) {
+			l.d("Cursor position: "
+					+ data.getPosition()
+					+ " contains scene name: "
+					+ data.getString(data
+							.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
+		}
 
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
+		l.d("Cursor loader reset");
 		scenesAdapter.swapCursor(null);
 
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> listView, View view, int position,
+			long id) {
+		// Get the cursor, positioned to the corresponding row in the
+		// result set
+		Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+		// Get the state's capital from this row in the database.
+		String sceneName = cursor.getString(cursor
+				.getColumnIndexOrThrow(ScenesDB.tables.scenes.column.NAME));
+		Toast.makeText(getActivity(), sceneName + " having id: " + id,
+				Toast.LENGTH_SHORT).show();
+		Uri uri = ScenesProvider.CONTENT_URI;
+		String pathSegment = Long.toString(id);
+		uri = Uri.withAppendedPath(uri, pathSegment);
+		getActivity().getContentResolver().delete(uri, null, null);
 	}
 }

@@ -14,4 +14,10 @@ public class PhySimProps {
 		public static final String sceneCreatorName = "sceneCreatorName";
 
 	}
+
+	public static class loaders {
+
+		public static final int scenesLoader = 512;
+
+	}
 }

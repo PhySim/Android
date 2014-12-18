@@ -31,6 +31,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.aspirephile.physim.Home" />
         </activity>
+
+        <provider
+            android:name="com.aspirephile.physim.scenes.db.ScenesProvider"
+            android:authorities="com.aspirephile.physim.scenes"
+            android:exported="false" />
     </application>
 
 </manifest>
