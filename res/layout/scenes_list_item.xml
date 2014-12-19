@@ -9,7 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         android:gravity="center"
-        android:text="@string/scene_list_name_sample" />
+        android:text="@string/scene_list_name_sample"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </LinearLayout>

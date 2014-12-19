@@ -32,7 +32,7 @@ public class ScenesCursorAdapter extends CursorAdapter {
 		 */
 		TextView name = (TextView) view.findViewById(R.id.tv_scene_list_name);
 		name.setText(cursor.getString(cursor
-				.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
+				.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME)));
 
 	}
 

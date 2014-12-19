@@ -16,12 +16,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/scene_selection_title"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="30sp" />
 
     <ListView
         android:id="@+id/lv_scene_selection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/scenes_list_item" >
+
     </ListView>
 
 </LinearLayout>

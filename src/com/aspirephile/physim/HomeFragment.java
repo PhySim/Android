@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.aspirephile.physim.scenes.db.ScenesCursorAdapter;
-import com.aspirephile.physim.scenes.db.ScenesDB;
+import com.aspirephile.physim.scenes.db.ScenesDBProps;
 import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (id == PhySimProps.loaders.scenesLoader) {
 			Uri uri = ScenesProvider.CONTENT_URI;
-			uri = Uri.withAppendedPath(uri, ScenesDB.tables.scenes.column.NAME);
+			uri = Uri.withAppendedPath(uri, ScenesDBProps.v1.tables.scenes.column.NAME);
 			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
 			return new CursorLoader(getActivity(), uri, null, null, null, null);
 		} else
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 						+ data.getPosition()
 						+ " contains scene name: "
 						+ data.getString(data
-								.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
+								.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME)));
 			}
 		}
 
@@ -126,12 +126,8 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 
 		// Get the state's capital from this row in the database.
 		String sceneName = cursor.getString(cursor
-				.getColumnIndexOrThrow(ScenesDB.tables.scenes.column.NAME));
+				.getColumnIndexOrThrow(ScenesDBProps.v1.tables.scenes.column.NAME));
 		Toast.makeText(getActivity(), sceneName + " having id: " + id,
 				Toast.LENGTH_SHORT).show();
-		Uri uri = ScenesProvider.CONTENT_URI;
-		String pathSegment = Long.toString(id);
-		uri = Uri.withAppendedPath(uri, pathSegment);
-		getActivity().getContentResolver().delete(uri, null, null);
 	}
 }

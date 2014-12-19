@@ -39,7 +39,7 @@ public class ScenesProvider extends ContentProvider {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, "scenes", SCENES);
 		uriMatcher.addURI(PROVIDER_NAME, "scenes/"
-				+ ScenesDB.tables.scenes.column.NAME, SCENE_NAMES);
+				+ ScenesDBProps.v1.tables.scenes.column.NAME, SCENE_NAMES);
 		uriMatcher.addURI(PROVIDER_NAME, "scenes/#", SCENE_ID);
 	}
 
@@ -108,17 +108,17 @@ public class ScenesProvider extends ContentProvider {
 		Cursor result = null;
 		if (uriMatcher.match(uri) == SCENES) {
 			result = scenesDBHandler.fetchAllScenes();
-			l.d("Fetching all scenes from ScenesDB returned cursor: " + result);
+			l.d("Fetching all scenes from ScenesDBProps returned cursor: " + result);
 		} else if (uriMatcher.match(uri) == SCENE_NAMES) {
 			result = scenesDBHandler.fetchAllSceneNames();
-			l.d("Fetching all scene names from ScenesDB returned cursor: "
+			l.d("Fetching all scene names from ScenesDBProps returned cursor: "
 					+ result);
 		} else if (uriMatcher.match(uri) == SCENE_ID) {
 			try {
 				String sceneID = uri.getPathSegments().get(1);
 				result = scenesDBHandler.getSceneByID(sceneID);
 				l.d("Fetching scene with sceneID: " + sceneID
-						+ " from ScenesDB returned cursor: " + result);
+						+ " from ScenesDBProps returned cursor: " + result);
 			} catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			}

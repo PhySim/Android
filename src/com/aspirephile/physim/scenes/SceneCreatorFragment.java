@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
 import com.aspirephile.physim.engine.Scene;
-import com.aspirephile.physim.scenes.db.ScenesDB;
+import com.aspirephile.physim.scenes.db.ScenesDBProps;
 import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
@@ -123,7 +122,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 		l.d("Querying scene name: " + userInput);
 		if (asserter.assertPointer(sceneNamesCursor)) {
 			int columnIndex = sceneNamesCursor
-					.getColumnIndex(ScenesDB.tables.scenes.column.NAME);
+					.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME);
 			l.d("Found " + sceneNamesCursor.getCount() + " names");
 			sceneNamesCursor.moveToFirst();
 			while (sceneNamesCursor.moveToNext()) {
@@ -199,7 +198,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (id == PhySimProps.loaders.scenesLoader) {
 			Uri uri = ScenesProvider.CONTENT_URI;
-			uri = Uri.withAppendedPath(uri, ScenesDB.tables.scenes.column.NAME);
+			uri = Uri.withAppendedPath(uri, ScenesDBProps.v1.tables.scenes.column.NAME);
 			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
 			return new CursorLoader(getActivity(), uri, null, null, null, null);
 		} else
@@ -214,7 +213,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 			data.moveToFirst();
 			while (data.moveToNext()) {
 				String sceneName = data.getString(data
-						.getColumnIndex(ScenesDB.tables.scenes.column.NAME));
+						.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME));
 				l.d("Cursor position: " + data.getPosition()
 						+ " contains scene name: " + sceneName);
 
