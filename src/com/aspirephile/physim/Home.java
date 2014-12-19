@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.SceneCreator;
+import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 
@@ -68,11 +69,12 @@ public class Home extends ActionBarActivity {
 				if (asserter.assertPointer(sceneInfo)) {
 					Scene scene = new Scene(sceneInfo);
 					if (asserter.assertPointer(scene)) {
-						if (asserter.assertPointer(homeF)) {
-							if (!scene.isLocked())
-								scene.lock();
-							// homeF.insertScene(scene);
-						}
+
+						if (!scene.isLocked())
+							scene.lock();
+						getContentResolver().insert(ScenesProvider.CONTENT_URI,
+								scene.toContentValues());
+						// homeF.insertScene(scene);
 					}
 				}
 

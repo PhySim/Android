@@ -106,9 +106,9 @@ public class ScenesDBHandler {
 		l.d("Querying database: " + ScenesDB.properties.DATABASE_NAME
 				+ ", table: " + asserted(table) + ", selection: "
 				+ asserted(selection) + ", selectionArgs: "
-				+ asserted(selectionArgs) + ", groupBy: " + asserted(groupBy)
-				+ ", having: " + asserted(having) + ", orderBy: "
-				+ asserted(orderBy));
+				+ stringManip.getFormatedStringArrayQuietly(selectionArgs)
+				+ ", groupBy: " + asserted(groupBy) + ", having: "
+				+ asserted(having) + ", orderBy: " + asserted(orderBy));
 		if (asserter.assertPointer(db))
 			return db.query(table, columns, selection, selectionArgs, groupBy,
 					having, orderBy);
@@ -117,13 +117,7 @@ public class ScenesDBHandler {
 	}
 
 	private String asserted(String s) {
-		return (asserter.assertPointerQuietly(s) == true ? s : "");
-	}
-
-	private String[] asserted(String[] s) {
-		String[] emptyStringArray = { "", "" };
-		return (asserter.assertPointerQuietly((Object[]) s) == true ? ((String[]) s)
-				: emptyStringArray);
+		return (asserter.assertPointerQuietly(s) == true ? s : "null");
 	}
 
 	public Cursor fetchAllScenes() {
@@ -137,6 +131,8 @@ public class ScenesDBHandler {
 	}
 
 	public Cursor queryScenes(String[] columns) {
+		l.d("Attempting to query scenes with columns: "
+				+ stringManip.getFormatedStringArray(columns));
 		Cursor mCursor = query(ScenesDB.tables.scenes.name, columns, null,
 				null, null, null, null);
 
@@ -148,27 +144,33 @@ public class ScenesDBHandler {
 	}
 
 	public Cursor getSceneByID(String sceneID) {
-		return db.query(ScenesDB.properties.DATABASE_NAME,
+		l.d("Querying scene with sceneID: " + sceneID);
+		return db.query(ScenesDB.tables.scenes.name,
 				ScenesDB.tables.scenes.allColumns, "_ID=?",
 				new String[] { sceneID }, null, null,
 				ScenesDB.tables.scenes.column.NAME + " asc ");
 	}
 
-	public int update(ContentValues contentValues, String contactID) {
-		int cnt = db.update(ScenesDB.properties.DATABASE_NAME, contentValues,
-				"_id=?", new String[] { contactID });
+	public int update(ContentValues contentValues, String sceneID) {
+		l.d("Attempting to update scene with ID: " + sceneID
+				+ " and content values: " + contentValues);
+		int cnt = db.update(ScenesDB.tables.scenes.name, contentValues,
+				"_id=?", new String[] { sceneID });
 		return cnt;
 	}
 
 	public long insert(ContentValues values) {
-		long rowID = db.insert(ScenesDB.properties.DATABASE_NAME, null, values);
+		l.d("Attempting to insert scene with content values: " + values);
+		long rowID = db.insert(ScenesDB.tables.scenes.name, null, values);
 		return rowID;
 	}
 
-	public int delete(String contactID) {
+	public int delete(String sceneID) {
 		// TODO Implement protection from SQL injections
-		int cnt = db.delete(ScenesDB.tables.scenes.name, "_id=" + contactID,
-				null);
+		l.d("Attempting to delete scene with ID: " + sceneID);
+		int cnt = db
+				.delete(ScenesDB.tables.scenes.name, "_id=" + sceneID, null);
+		l.d(cnt + " rows deleted");
 		return cnt;
 	}
 

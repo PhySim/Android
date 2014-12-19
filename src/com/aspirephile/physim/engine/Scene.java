@@ -1,8 +1,10 @@
 package com.aspirephile.physim.engine;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 
 import com.aspirephile.physim.PhySimProps;
+import com.aspirephile.physim.scenes.db.ScenesDB;
 import com.aspirephile.shared.Vector;
 import com.aspirephile.shared.Vector.Vector3;
 import com.aspirephile.shared.debug.NullPointerAsserter;
@@ -24,7 +26,7 @@ public class Scene {
 
 	public Scene(Bundle sceneInfo) {
 		try {
-			setName(sceneInfo.getString(PhySimProps.keys.sceneCreatorName));
+			setName(sceneInfo.getString(ScenesDB.tables.scenes.column.NAME));
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -73,8 +75,14 @@ public class Scene {
 
 	public Bundle toBundle() {
 		Bundle bundle = new Bundle();
-		bundle.putString(PhySimProps.keys.sceneCreatorName, getName());
+		bundle.putString(ScenesDB.tables.scenes.column.NAME, getName());
 		return bundle;
+	}
+
+	public ContentValues toContentValues() {
+		ContentValues values = new ContentValues();
+		values.put(ScenesDB.tables.scenes.column.NAME, getName());
+		return values;
 	}
 
 }

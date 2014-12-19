@@ -38,6 +38,8 @@ public class ScenesProvider extends ContentProvider {
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(PROVIDER_NAME, "scenes", SCENES);
+		uriMatcher.addURI(PROVIDER_NAME, "scenes/"
+				+ ScenesDB.tables.scenes.column.NAME, SCENE_NAMES);
 		uriMatcher.addURI(PROVIDER_NAME, "scenes/#", SCENE_ID);
 	}
 
@@ -54,11 +56,13 @@ public class ScenesProvider extends ContentProvider {
 
 		l.d("ScenesProvider recruited to delete with URI: " + uri
 				+ ", selection: " + selection + ", selectionArgs: "
-				+ stringManip.getFormatedStringArray(selectionArgs));
+				+ stringManip.getFormatedStringArrayQuietly(selectionArgs));
 		int cnt = 0;
 		if (uriMatcher.match(uri) == SCENE_ID) {
 			String contactID = uri.getPathSegments().get(1);
 			cnt = scenesDBHandler.delete(contactID);
+			l.d(cnt + " rows affected by deletion");
+			l.d("Notifying content resolver of change with URI: " + CONTENT_URI);
 			getContext().getContentResolver().notifyChange(CONTENT_URI, null);
 		}
 		return cnt;
@@ -75,16 +79,21 @@ public class ScenesProvider extends ContentProvider {
 	 */
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		long rowID = scenesDBHandler.insert(values);
 		Uri _uri = null;
-		if (rowID > 0) {
-			_uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-		} else {
-			try {
-				throw new SQLException("Failed to insert : " + uri);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		if (uri.equals(CONTENT_URI)) {
+			long rowID = scenesDBHandler.insert(values);
+			l.d("Row inserted with rowID: " + rowID);
+			if (rowID > 0) {
+				_uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+			} else {
+				try {
+					throw new SQLException("Failed to insert : " + uri);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
+			l.d("Notifying content resolver of change with URI: " + CONTENT_URI);
+			getContext().getContentResolver().notifyChange(CONTENT_URI, null);
 		}
 		return _uri;
 
@@ -95,22 +104,30 @@ public class ScenesProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 
-		l.d("ScenesProvider query made with uri: " + uri + ", projection");
+		l.d("ScenesProvider query being made with uri: " + uri + ", projection");
+		Cursor result = null;
 		if (uriMatcher.match(uri) == SCENES) {
-			return scenesDBHandler.fetchAllSceneNames();
+			result = scenesDBHandler.fetchAllScenes();
+			l.d("Fetching all scenes from ScenesDB returned cursor: " + result);
 		} else if (uriMatcher.match(uri) == SCENE_NAMES) {
-			return scenesDBHandler.fetchAllSceneNames();
+			result = scenesDBHandler.fetchAllSceneNames();
+			l.d("Fetching all scene names from ScenesDB returned cursor: "
+					+ result);
 		} else if (uriMatcher.match(uri) == SCENE_ID) {
 			try {
 				String sceneID = uri.getPathSegments().get(1);
-				Cursor result = scenesDBHandler.getSceneByID(sceneID);
-				result.setNotificationUri(getContext().getContentResolver(),
-						CONTENT_URI);
+				result = scenesDBHandler.getSceneByID(sceneID);
+				l.d("Fetching scene with sceneID: " + sceneID
+						+ " from ScenesDB returned cursor: " + result);
 			} catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		if (asserter.assertPointer(result)) {
+			l.d("Setting notification URI: " + CONTENT_URI);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+		}
+		return result;
 	}
 
 	/**
@@ -124,7 +141,9 @@ public class ScenesProvider extends ContentProvider {
 		if (uriMatcher.match(uri) == SCENE_ID) {
 			String contactID = uri.getPathSegments().get(1);
 			cnt = scenesDBHandler.update(contentValues, contactID);
-
+			l.d(cnt + " rows affected by updation");
+			l.d("Setting notification URI: " + CONTENT_URI);
+			getContext().getContentResolver().notifyChange(CONTENT_URI, null);
 		}
 		return cnt;
 	}

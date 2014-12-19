@@ -80,13 +80,13 @@ public class SceneCreator extends ActionBarActivity implements OnClickListener,
 			Intent i = new Intent();
 			Scene scene = sceneCreatorF.getScene();
 			Bundle sceneInfo;
-			if (scene != null) {
+			if (asserter.assertPointer(scene)) {
 				sceneInfo = scene.toBundle();
 				i.putExtra(PhySimProps.keys.sceneCreatorBundle, sceneInfo);
 				setResult(Activity.RESULT_OK, i);
 				finish();
 			} else// else case is more or less redundant since done button is
-					// expected to be disabled
+					// expected to be disabled when scene is invalid
 			{
 
 				Toast.makeText(

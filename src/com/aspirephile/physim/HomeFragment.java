@@ -15,7 +15,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.physim.scenes.db.ScenesCursorAdapter;
 import com.aspirephile.physim.scenes.db.ScenesDB;
 import com.aspirephile.physim.scenes.db.ScenesProvider;
@@ -48,16 +47,6 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 	private void intializeFeilds() {
 		getLoaderManager().initLoader(PhySimProps.loaders.scenesLoader, null,
 				this);
-
-	}
-
-	private void insertScenes() {
-		Scene scene1 = new Scene();
-		scene1.setName("Planetary");
-		scene1.lock();
-		Scene scene2 = new Scene();
-		scene2.setName("Cellular");
-		scene2.lock();
 
 	}
 
@@ -95,22 +84,28 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		Uri uri = ScenesProvider.CONTENT_URI;
-		l.d("Instantiating new loader with URI: " + uri);
-		return new CursorLoader(getActivity(), uri, null, null, null, null);
+		if (id == PhySimProps.loaders.scenesLoader) {
+			Uri uri = ScenesProvider.CONTENT_URI;
+			uri = Uri.withAppendedPath(uri, ScenesDB.tables.scenes.column.NAME);
+			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
+			return new CursorLoader(getActivity(), uri, null, null, null, null);
+		} else
+			return null;
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		l.d("Cursor load finished");
 		scenesAdapter.swapCursor(data);
-		data.moveToFirst();
-		while (data.moveToNext()) {
-			l.d("Cursor position: "
-					+ data.getPosition()
-					+ " contains scene name: "
-					+ data.getString(data
-							.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
+		if (asserter.assertPointer(data)) {
+			data.moveToFirst();
+			while (data.moveToNext()) {
+				l.d("Cursor position: "
+						+ data.getPosition()
+						+ " contains scene name: "
+						+ data.getString(data
+								.getColumnIndex(ScenesDB.tables.scenes.column.NAME)));
+			}
 		}
 
 	}
