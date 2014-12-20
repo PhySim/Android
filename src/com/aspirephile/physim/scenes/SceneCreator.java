@@ -1,23 +1,16 @@
 package com.aspirephile.physim.scenes;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
-import com.aspirephile.physim.engine.Scene;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 
-public class SceneCreator extends ActionBarActivity implements OnClickListener,
+public class SceneCreator extends ActionBarActivity implements
 		OnSceneFieldsValidityListener {
 	private NullPointerAsserter asserter = new NullPointerAsserter(
 			SceneCreatorFragment.class);
@@ -69,38 +62,8 @@ public class SceneCreator extends ActionBarActivity implements OnClickListener,
 	}
 
 	private void initializeFeilds() {
-		done.setOnClickListener(this);
+		done.setOnClickListener(sceneCreatorF);
 		sceneCreatorF.setOnSceneFieldsValidityListener(this);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.b_scene_creator_done:
-			Intent i = new Intent();
-			Scene scene = sceneCreatorF.getScene();
-			Bundle sceneInfo;
-			if (asserter.assertPointer(scene)) {
-				sceneInfo = scene.toBundle();
-				i.putExtra(PhySimProps.keys.sceneCreatorBundle, sceneInfo);
-				setResult(Activity.RESULT_OK, i);
-				finish();
-			} else// else case is more or less redundant since done button is
-					// expected to be disabled when scene is invalid
-			{
-
-				Toast.makeText(
-						getApplicationContext(),
-						getResources().getString(
-								R.string.scene_creator_toast_field_invalid)
-								+ invalidFeilds, Toast.LENGTH_LONG).show();
-			}
-
-			break;
-		default:
-			l.w("Unknown button clicked (id: " + v.getId() + ")");
-			break;
-		}
 	}
 
 	@Override

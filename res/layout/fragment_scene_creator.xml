@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/scene_creator_name_hint"
-        android:imeOptions="actionDone"
         android:inputType="textPersonName" />
 
     <TextView

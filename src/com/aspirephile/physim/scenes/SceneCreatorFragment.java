@@ -1,5 +1,7 @@
 package com.aspirephile.physim.scenes;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,11 +15,15 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
@@ -28,7 +34,8 @@ import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 
 public class SceneCreatorFragment extends Fragment implements TextWatcher,
-		OnSceneFieldsValidityListener, LoaderManager.LoaderCallbacks<Cursor> {
+		OnSceneFieldsValidityListener, LoaderManager.LoaderCallbacks<Cursor>,
+		OnClickListener {
 	private NullPointerAsserter asserter = new NullPointerAsserter(
 			SceneCreatorFragment.class);
 	private Logger l = new Logger(SceneCreatorFragment.class);
@@ -99,6 +106,20 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 				return Character.isLetterOrDigit(c) || Character.isSpaceChar(c);
 			}
 		};
+		name.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// If the event is a key-down event on the "enter" button
+				if ((event.getAction() == KeyEvent.ACTION_DOWN)
+						&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+					// Perform action on key press
+					Toast.makeText(getActivity(), name.getText(),
+							Toast.LENGTH_SHORT).show();
+					// TODO Finish the scene creator
+					return true;
+				}
+				return false;
+			}
+		});
 		name.setFilters(new InputFilter[] { filter });
 		sceneNamesCursor = null;
 		getLoaderManager().initLoader(PhySimProps.loaders.scenesLoader, null,
@@ -266,6 +287,37 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		l.d("Cursor loader reset");
 		sceneNamesCursor = null;
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.b_scene_creator_done:
+			Activity parentActivity = getActivity();
+			Intent i = new Intent();
+			Scene scene = getScene();
+			Bundle sceneInfo;
+			if (asserter.assertPointer(scene)) {
+				sceneInfo = scene.toBundle();
+				i.putExtra(PhySimProps.keys.sceneCreatorBundle, sceneInfo);
+				parentActivity.setResult(Activity.RESULT_OK, i);
+				parentActivity.finish();
+			} else// else case is more or less redundant since done button is
+					// expected to be disabled when scene is invalid
+			{
+
+				Toast.makeText(
+						parentActivity.getApplicationContext(),
+						getResources().getString(
+								R.string.scene_creator_toast_field_invalid),
+						Toast.LENGTH_LONG).show();
+			}
+
+			break;
+		default:
+			l.w("Unknown button clicked (id: " + v.getId() + ")");
+			break;
+		}
 	}
 
 }
