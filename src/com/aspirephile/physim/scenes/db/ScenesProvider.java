@@ -7,6 +7,7 @@ import com.aspirephile.shared.debug.NullPointerAsserter;
 import com.aspirephile.shared.utils.StringManipulator;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -19,14 +20,19 @@ public class ScenesProvider extends ContentProvider {
 			ScenesProvider.class);
 	private StringManipulator stringManip = new StringManipulator(asserter);
 
-	public static final String PROVIDER_NAME = "com.aspirephile.physim.scenes";
+	public static final String AUTHORITY = "com.aspirephile.physim.scenes";
+
+	public static final class paths {
+		public static final String scenes = "scenes";
+	}
 
 	/**
 	 * A uri to do operations on contacts table. A content provider is
 	 * identified by its uri
 	 */
-	public static final Uri CONTENT_URI = Uri.parse("content://"
-			+ PROVIDER_NAME + "/scenes");
+	public static final Uri CONTENT_URI = Uri
+			.parse(ContentResolver.SCHEME_CONTENT + "://" + AUTHORITY + "/"
+					+ paths.scenes);
 
 	/** Constants to identify the requested operation */
 	private static final int SCENE_ID = 1;
@@ -37,10 +43,10 @@ public class ScenesProvider extends ContentProvider {
 
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		uriMatcher.addURI(PROVIDER_NAME, "scenes", SCENES);
-		uriMatcher.addURI(PROVIDER_NAME, "scenes/"
+		uriMatcher.addURI(AUTHORITY, paths.scenes, SCENES);
+		uriMatcher.addURI(AUTHORITY, paths.scenes + "/"
 				+ ScenesDBProps.v1.tables.scenes.column.NAME, SCENE_NAMES);
-		uriMatcher.addURI(PROVIDER_NAME, "scenes/#", SCENE_ID);
+		uriMatcher.addURI(AUTHORITY, paths.scenes + "/#", SCENE_ID);
 	}
 
 	/** This content provider does the database operations by this object */
@@ -108,7 +114,8 @@ public class ScenesProvider extends ContentProvider {
 		Cursor result = null;
 		if (uriMatcher.match(uri) == SCENES) {
 			result = scenesDBHandler.fetchAllScenes();
-			l.d("Fetching all scenes from ScenesDBProps returned cursor: " + result);
+			l.d("Fetching all scenes from ScenesDBProps returned cursor: "
+					+ result);
 		} else if (uriMatcher.match(uri) == SCENE_NAMES) {
 			result = scenesDBHandler.fetchAllSceneNames();
 			l.d("Fetching all scene names from ScenesDBProps returned cursor: "

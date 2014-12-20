@@ -51,14 +51,16 @@ public class ScenesDBHandler {
 				ContentValues initialValues = new ContentValues();
 				initialValues.put(ScenesDBProps.v1.tables.scenes.column.NAME,
 						scene.getName());
-				initialValues.put(ScenesDBProps.v1.tables.scenes.column.BOUNDED,
+				initialValues.put(
+						ScenesDBProps.v1.tables.scenes.column.BOUNDED,
 						(scene.getBounded() ? 1 : 0));
-				initialValues.put(ScenesDBProps.v1.tables.scenes.column.CONTINENT,
+				initialValues.put(
+						ScenesDBProps.v1.tables.scenes.column.CONTINENT,
 						"Sample continent");
 				initialValues.put(ScenesDBProps.v1.tables.scenes.column.REGION,
 						"Sample region");
-				long result = db.insert(ScenesDBProps.v1.tables.scenes.name, null,
-						initialValues);
+				long result = db.insert(ScenesDBProps.v1.tables.scenes.name,
+						null, initialValues);
 				l.d("Scene inserted successfully with result: " + result);
 				return result;
 			} else
@@ -82,14 +84,14 @@ public class ScenesDBHandler {
 		Cursor mCursor = null;
 		if (inputText == null || inputText.length() == 0) {
 			mCursor = query(ScenesDBProps.v1.tables.scenes.name,
-					ScenesDBProps.v1.tables.scenes.allColumns, null, null, null, null,
-					null);
+					ScenesDBProps.v1.tables.scenes.allColumns, null, null,
+					null, null, null);
 
 		} else {
 			mCursor = db.query(true, ScenesDBProps.v1.tables.scenes.name,
 					ScenesDBProps.v1.tables.scenes.allColumns,
-					ScenesDBProps.v1.tables.scenes.column.NAME + " like '%" + inputText
-							+ "%'", null, null, null, null, null);
+					ScenesDBProps.v1.tables.scenes.column.NAME + " like '%"
+							+ inputText + "%'", null, null, null, null, null);
 		}
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -133,8 +135,8 @@ public class ScenesDBHandler {
 	public Cursor queryScenes(String[] columns) {
 		l.d("Attempting to query scenes with columns: "
 				+ stringManip.getFormatedStringArray(columns));
-		Cursor mCursor = query(ScenesDBProps.v1.tables.scenes.name, columns, null,
-				null, null, null, null);
+		Cursor mCursor = query(ScenesDBProps.v1.tables.scenes.name, columns,
+				null, null, null, null, null);
 
 		if (mCursor != null) {
 			mCursor.moveToFirst();
@@ -161,15 +163,16 @@ public class ScenesDBHandler {
 
 	public long insert(ContentValues values) {
 		l.d("Attempting to insert scene with content values: " + values);
-		long rowID = db.insert(ScenesDBProps.v1.tables.scenes.name, null, values);
+		long rowID = db.insert(ScenesDBProps.v1.tables.scenes.name, null,
+				values);
 		return rowID;
 	}
 
 	public int delete(String sceneID) {
 		// TODO Implement protection from SQL injections
 		l.d("Attempting to delete scene with ID: " + sceneID);
-		int cnt = db
-				.delete(ScenesDBProps.v1.tables.scenes.name, "_id=" + sceneID, null);
+		int cnt = db.delete(ScenesDBProps.v1.tables.scenes.name, "_id=?",
+				new String[] { sceneID });
 		l.d(cnt + " rows deleted");
 		return cnt;
 	}

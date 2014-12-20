@@ -8,6 +8,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +68,38 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 	private void initializeFeilds() {
 		updateSceneNameValidity(SceneNameState.EMPTY);
 		name.addTextChangedListener(this);
+		InputFilter filter = new InputFilter() {
+			@Override
+			public CharSequence filter(CharSequence source, int start, int end,
+					Spanned dest, int dstart, int dend) {
+				boolean keepOriginal = true;
+				StringBuilder sb = new StringBuilder(end - start);
+				for (int i = start; i < end; i++) {
+					char c = source.charAt(i);
+					if (isCharAllowed(c)) // put your condition here
+						sb.append(c);
+					else
+						keepOriginal = false;
+				}
+				if (keepOriginal)
+					return null;
+				else {
+					if (source instanceof Spanned) {
+						SpannableString sp = new SpannableString(sb);
+						TextUtils.copySpansFrom((Spanned) source, start,
+								sb.length(), null, sp, 0);
+						return sp;
+					} else {
+						return sb;
+					}
+				}
+			}
+
+			private boolean isCharAllowed(char c) {
+				return Character.isLetterOrDigit(c) || Character.isSpaceChar(c);
+			}
+		};
+		name.setFilters(new InputFilter[] { filter });
 		sceneNamesCursor = null;
 		getLoaderManager().initLoader(PhySimProps.loaders.scenesLoader, null,
 				this);
@@ -82,8 +118,12 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 	private String getSceneName() {
 		if (nameState == SceneNameState.GOOD) {
 			String sceneName = name.getText().toString();
-			if (sceneName.endsWith(" ")) {
-				return sceneName.substring(0, sceneName.length() - 1);
+			int toTrim = 0;
+			for (int i = sceneName.length() - 1; i >= 0; i--) {
+				if (sceneName.charAt(i) == ' ') {
+					toTrim++;
+				} else
+					return sceneName.substring(0, sceneName.length() - toTrim);
 			}
 		}
 		return null;
@@ -103,10 +143,8 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 
 		if (s.length() > 0) {
 
-			if (querySceneName(s.toString()))// TODO search through cursor of
-												// scene names
-			// (maybe asynchronously)
-			// for
+			if (querySceneName(s.toString()))
+			// TODO search asynchronously through cursor for scene name
 			// match and appropriately provide a message on
 			// the screen
 			{
@@ -125,7 +163,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 					.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME);
 			l.d("Found " + sceneNamesCursor.getCount() + " names");
 			sceneNamesCursor.moveToFirst();
-			while (sceneNamesCursor.moveToNext()) {
+			do {
 				String sceneName = sceneNamesCursor.getString(columnIndex);
 				boolean isMatch = userInput.equals(sceneName);
 				l.d("Checking if userInput: " + userInput + " matches "
@@ -135,7 +173,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 					return true;
 				}
 
-			}
+			} while (sceneNamesCursor.moveToNext());
 		}
 		return false;
 	}
@@ -198,7 +236,8 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (id == PhySimProps.loaders.scenesLoader) {
 			Uri uri = ScenesProvider.CONTENT_URI;
-			uri = Uri.withAppendedPath(uri, ScenesDBProps.v1.tables.scenes.column.NAME);
+			uri = Uri.withAppendedPath(uri,
+					ScenesDBProps.v1.tables.scenes.column.NAME);
 			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
 			return new CursorLoader(getActivity(), uri, null, null, null, null);
 		} else
@@ -212,8 +251,9 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 			sceneNamesCursor = data;
 			data.moveToFirst();
 			while (data.moveToNext()) {
-				String sceneName = data.getString(data
-						.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME));
+				String sceneName = data
+						.getString(data
+								.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME));
 				l.d("Cursor position: " + data.getPosition()
 						+ " contains scene name: " + sceneName);
 

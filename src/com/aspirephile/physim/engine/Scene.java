@@ -1,5 +1,7 @@
 package com.aspirephile.physim.engine;
 
+import java.io.Serializable;
+
 import android.content.ContentValues;
 import android.os.Bundle;
 
@@ -8,7 +10,12 @@ import com.aspirephile.shared.Vector;
 import com.aspirephile.shared.Vector.Vector3;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 
-public class Scene {
+public class Scene implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7995238174074629633L;
+
 	NullPointerAsserter asserter = new NullPointerAsserter(Scene.class);
 
 	private String name;
