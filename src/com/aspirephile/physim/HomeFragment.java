@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (id == PhySimProps.loaders.scenesLoader) {
 			Uri uri = ScenesProvider.CONTENT_URI;
-			uri = Uri.withAppendedPath(uri, ScenesDBProps.v1.tables.scenes.column.NAME);
+			uri = Uri.withAppendedPath(uri, ScenesDBProps.v2.tables.scenes.column.NAME);
 			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
 			return new CursorLoader(getActivity(), uri, null, null, null, null);
 		} else
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 						+ data.getPosition()
 						+ " contains scene name: "
 						+ data.getString(data
-								.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME)));
+								.getColumnIndex(ScenesDBProps.v2.tables.scenes.column.NAME)));
 			}
 		}
 
@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 
 		// Get the state's capital from this row in the database.
 		String sceneName = cursor.getString(cursor
-				.getColumnIndexOrThrow(ScenesDBProps.v1.tables.scenes.column.NAME));
+				.getColumnIndexOrThrow(ScenesDBProps.v2.tables.scenes.column.NAME));
 		Toast.makeText(getActivity(), sceneName + " having id: " + id,
 				Toast.LENGTH_SHORT).show();
 	}

@@ -2,10 +2,6 @@ package com.aspirephile.physim.scenes.db;
 
 import java.sql.SQLException;
 
-import com.aspirephile.shared.debug.Logger;
-import com.aspirephile.shared.debug.NullPointerAsserter;
-import com.aspirephile.shared.utils.StringManipulator;
-
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -13,6 +9,11 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+
+import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.shared.debug.Logger;
+import com.aspirephile.shared.debug.NullPointerAsserter;
+import com.aspirephile.shared.utils.StringManipulator;
 
 public class ScenesProvider extends ContentProvider {
 	private Logger l = new Logger(ScenesProvider.class);
@@ -45,7 +46,7 @@ public class ScenesProvider extends ContentProvider {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI(AUTHORITY, paths.scenes, SCENES);
 		uriMatcher.addURI(AUTHORITY, paths.scenes + "/"
-				+ ScenesDBProps.v1.tables.scenes.column.NAME, SCENE_NAMES);
+				+ ScenesDBProps.v2.tables.scenes.column.NAME, SCENE_NAMES);
 		uriMatcher.addURI(AUTHORITY, paths.scenes + "/#", SCENE_ID);
 	}
 
@@ -87,7 +88,8 @@ public class ScenesProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		Uri _uri = null;
 		if (uri.equals(CONTENT_URI)) {
-			long rowID = scenesDBHandler.insert(values);
+			Scene scene = new Scene(values);
+			long rowID = scenesDBHandler.insert(scene);
 			l.d("Row inserted with rowID: " + rowID);
 			if (rowID > 0) {
 				_uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
@@ -110,7 +112,12 @@ public class ScenesProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 
-		l.d("ScenesProvider query being made with uri: " + uri + ", projection");
+		l.d("ScenesProvider query being made with uri: " + uri
+				+ ", projection: "
+				+ stringManip.getFormatedStringArrayQuietly(projection)
+				+ ", selection: " + selection + ", selectionArgs: "
+				+ stringManip.getFormatedStringArrayQuietly(selectionArgs)
+				+ ", sortOrder: " + sortOrder);
 		Cursor result = null;
 		if (uriMatcher.match(uri) == SCENES) {
 			result = scenesDBHandler.fetchAllScenes();

@@ -30,9 +30,10 @@ public class ScenesCursorAdapter extends CursorAdapter {
 		 * view.setBackgroundColor(context.getResources().getColor(
 		 * R.color.background_even)); }
 		 */
+		// TODO Show created and last modified feilds
 		TextView name = (TextView) view.findViewById(R.id.tv_scene_list_name);
 		name.setText(cursor.getString(cursor
-				.getColumnIndex(ScenesDBProps.v1.tables.scenes.column.NAME)));
+				.getColumnIndex(ScenesDBProps.v2.tables.scenes.column.NAME)));
 
 	}
 
