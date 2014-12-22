@@ -1,5 +1,6 @@
 package com.aspirephile.physim;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,7 +87,8 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (id == PhySimProps.loaders.scenesLoader) {
 			Uri uri = ScenesProvider.CONTENT_URI;
-			uri = Uri.withAppendedPath(uri, ScenesDBProps.v2.tables.scenes.column.NAME);
+			uri = Uri.withAppendedPath(uri,
+					ScenesDBProps.v2.tables.scenes.column.NAME);
 			l.d("Instantiating new loader with id: " + id + "and URI: " + uri);
 			return new CursorLoader(getActivity(), uri, null, null, null, null);
 		} else
@@ -125,9 +127,12 @@ public class HomeFragment extends Fragment implements OnItemClickListener,
 		Cursor cursor = (Cursor) listView.getItemAtPosition(position);
 
 		// Get the state's capital from this row in the database.
-		String sceneName = cursor.getString(cursor
-				.getColumnIndexOrThrow(ScenesDBProps.v2.tables.scenes.column.NAME));
+		String sceneName = cursor
+				.getString(cursor
+						.getColumnIndexOrThrow(ScenesDBProps.v2.tables.scenes.column.NAME));
 		Toast.makeText(getActivity(), sceneName + " having id: " + id,
 				Toast.LENGTH_SHORT).show();
+		Intent intent = new Intent(getActivity(), SceneActivity.class);
+		getActivity().startActivity(intent);
 	}
 }

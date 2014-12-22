@@ -22,4 +22,6 @@
 
     <!-- TODO add list of random scene names -->
 
+    <string name="title_activity_scene">SceneActivity</string>
+
 </resources>

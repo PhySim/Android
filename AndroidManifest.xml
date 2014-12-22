@@ -36,6 +36,11 @@
             android:name="com.aspirephile.physim.scenes.db.ScenesProvider"
             android:authorities="com.aspirephile.physim.scenes"
             android:exported="false" />
+
+        <activity
+            android:name="com.aspirephile.physim.SceneActivity"
+            android:label="@string/title_activity_scene" >
+        </activity>
     </application>
 
 </manifest>
