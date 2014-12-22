@@ -1,4 +1,4 @@
-package com.aspirephile.physim.engine;
+package com.aspirephile.physim.core;
 
 import java.io.Serializable;
 

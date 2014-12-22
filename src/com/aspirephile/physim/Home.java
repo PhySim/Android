@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.physim.core.Scene;
 import com.aspirephile.physim.scenes.SceneCreator;
 import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;

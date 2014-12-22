@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.aspirephile.physim.PhySimProps;
 import com.aspirephile.physim.R;
-import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.physim.core.Scene;
 import com.aspirephile.physim.scenes.db.ScenesDBProps;
 import com.aspirephile.physim.scenes.db.ScenesProvider;
 import com.aspirephile.shared.debug.Logger;

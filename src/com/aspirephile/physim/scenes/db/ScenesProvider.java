@@ -10,7 +10,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.aspirephile.physim.engine.Scene;
+import com.aspirephile.physim.core.Scene;
 import com.aspirephile.shared.debug.Logger;
 import com.aspirephile.shared.debug.NullPointerAsserter;
 import com.aspirephile.shared.utils.StringManipulator;
