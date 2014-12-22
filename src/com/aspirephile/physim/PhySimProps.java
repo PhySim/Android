@@ -11,7 +11,7 @@ public class PhySimProps {
 	public static class keys {
 
 		public static final String sceneCreatorBundle = "sceneCreatorBundle";
-		public static final String sceneCreatorName = "sceneCreatorName";
+		public static final String sceneName = "sceneName";
 
 	}
 

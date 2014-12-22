@@ -238,7 +238,7 @@ public class SceneCreatorFragment extends Fragment implements TextWatcher,
 			case EMPTY:
 				nameMessage.setVisibility(View.VISIBLE);
 				validityListener.onSceneInfoInvalid(
-						PhySimProps.keys.sceneCreatorName, state.toString());
+						PhySimProps.keys.sceneName, state.toString());
 				if (nameState == SceneNameState.NOT_UNIQUE)
 					nameMessage
 							.setText(R.string.scene_creator_name_message_not_unique);

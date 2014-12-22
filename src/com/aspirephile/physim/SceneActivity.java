@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.aspirephile.physim.core.PhySim;
+import com.aspirephile.physim.core.PhySimOptions;
 import com.threed.jpct.Camera;
 import com.threed.jpct.FrameBuffer;
 import com.threed.jpct.Light;
@@ -46,12 +48,18 @@ public class SceneActivity extends ActionBarActivity {
 	private float ypos = -1;
 
 	private Object3D cube = null;
+
 	private int fps = 0;
 	private boolean gl2 = true;
 
 	private Light sun = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
+
+		PhySimOptions options = new PhySimOptions();
+		// Set options here...
+		PhySim p = new PhySim(getApplication());
+		p.setOptions(options);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -239,7 +247,7 @@ public class SceneActivity extends ActionBarActivity {
 			fb.display();
 
 			if (System.currentTimeMillis() - time >= 1000) {
-				Logger.log(fps + "fps");
+				Logger.log(fps + "FPS");
 				fps = 0;
 				time = System.currentTimeMillis();
 			}
